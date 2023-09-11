@@ -49,6 +49,8 @@ void setup() {
   digitalWrite(SPEAKER, LOW);
   pinMode(IRdistancePin,INPUT);
 
+  randomSeed(analogRead(0)); // setup for the randomiser
+
   TFTscreen.begin();  //initialize the TFT library
 
   TFTscreen.background(0, 0, 0);  // clear the screen with a black background
@@ -85,6 +87,29 @@ void loop() {
     pushbuttonState = digitalRead(pushbuttonPin); // read state of pushbutton
     if (pushbuttonState == 0){
       arduinoState = 3;
+    }
+  }
+  else if (arduinoState == 3){
+    Serial.println("Pushbutton pressed, checking lottery");
+    // some lottery function, set something to the display
+    delay(500);
+    TFTscreen.background(0,0,0); 
+    TFTscreen.text("Checking win!", 6, 57);
+    delay(1000);
+    randomNumberWin = random(2);
+    if (randomNumberWin == 0){
+      Serial.println(randomNumberWin);
+      TFTscreen.background(0,0,0); 
+      TFTscreen.text("No win today :-(", 6, 57);
+      for (int i = 0; i < 6; i++) {
+        tone(SPEAKER, loseMelody[i], 200);
+        delay(200 + 50);  // Add a short pause between notes
+      }
+    }
+    else {
+      Serial.println(randomNumberWin);
+      TFTscreen.background(0,0,0);
+      TFTscreen.text("You've won! CG!", 6, 57);
       for (int thisNote = 0; thisNote < 8; thisNote++) {
         // to calculate the note duration, take one second divided by the note type.
         //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
