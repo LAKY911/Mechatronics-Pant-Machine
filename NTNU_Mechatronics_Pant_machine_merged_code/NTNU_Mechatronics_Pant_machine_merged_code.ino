@@ -26,7 +26,7 @@ int BassTab[] = {1911, 1702, 1516, 1431, 1275, 1136, 1012}; //bass 1~7
 int arduinoState = 0; // state of arduino - 0 = start; 1 = can inserted; 2 = waiting for pushbutton press; 3 = lottery check
 int randomNumberWin = 0;
 
-int YELLOW[] = {255,255,0};
+
 
 int melody[] = {
   NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
@@ -149,14 +149,26 @@ void loop() {
       TFTscreen.text("You've won! CG!", 6, 57);
       delay(1000);
       TFTscreen.background(0,0,0);
-      for (int i=0;  i<10; i++){
+      for (int thisNote = 0; thisNote < 8; thisNote++) {
+        // to calculate the note duration, take one second divided by the note type.
+        //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+        int noteDuration = 1000 / noteDurations[thisNote];
+        tone(SPEAKER, melody[thisNote], noteDuration);
+        // to distinguish the notes, set a minimum time between them.
+        // the note's duration + 30% seems to work well:
+        int pauseBetweenNotes = noteDuration * 1.30;
+        delay(pauseBetweenNotes);
+        // stop the tone playing:
+        noTone(SPEAKER);
+      }
+      for (int i=0;  i<3; i++){
         // Draw the firework
         int x = random(TFTscreen.width());
         int y = random(TFTscreen.height());
-        uint16_t color = random(0x10000);
-        uint16_t color = YELLOW;
+        
+        uint16_t color = 0xFFFF00;
         drawFirework(x, y, color);
-        delay(random(500, 3000)); // Delay between fireworks
+        delay(random(100, 600)); // Delay between fireworks
       }
     }
     delay(3000);
@@ -196,7 +208,7 @@ void drawFirework(int x, int y, uint16_t color) {
 
   for (int i = 0; i < numParticles; i++) {
     int angle = random(360);
-    float velocity = random(2, 5);
+    float velocity = random(6, 10);
     int x1 = x;
     int y1 = y;
 
@@ -212,7 +224,7 @@ void drawFirework(int x, int y, uint16_t color) {
       color -= 0x0101;
 
       // Delay to control the particle speed
-      delay(10);
+      delay(7);
     }
   }
 }
