@@ -124,7 +124,7 @@ void loop() {
     delay(3000);
     arduinoState = 0; // set arduinoState to start this flow again
     TFTscreen.background(0,0,0); 
-    TFTscreen.text("Insert can.", 6, 57);
+    TFTscreen.text("Feed me cans!", 6, 57);
   }
   
   /*
