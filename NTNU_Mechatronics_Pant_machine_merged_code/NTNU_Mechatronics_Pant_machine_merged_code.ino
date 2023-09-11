@@ -26,6 +26,8 @@ int BassTab[] = {1911, 1702, 1516, 1431, 1275, 1136, 1012}; //bass 1~7
 int arduinoState = 0; // state of arduino - 0 = start; 1 = can inserted; 2 = waiting for pushbutton press; 3 = lottery check
 int randomNumberWin = 0;
 
+int YELLOW[] = {255,255,0};
+
 int melody[] = {
   NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
 };
@@ -89,7 +91,7 @@ void loop() {
       arduinoState = 3;
     }
   }
-  else if (arduinoState == 3){
+  /*else if (arduinoState == 3){
     Serial.println("Pushbutton pressed, checking lottery");
     // some lottery function, set something to the display
     delay(500);
@@ -123,7 +125,7 @@ void loop() {
         noTone(SPEAKER);
       }
     }
-  }
+  }*/
   else if (arduinoState == 3){
     Serial.println("Pushbutton pressed, checking lottery");
     // some lottery function, set something to the display
@@ -146,11 +148,12 @@ void loop() {
       TFTscreen.background(0,0,0);
       TFTscreen.text("You've won! CG!", 6, 57);
       delay(1000);
+      TFTscreen.background(0,0,0);
       for (int i=0;  i<10; i++){
         // Draw the firework
-        int x = random(TFTScreen.width());
-        int y = random(TFTScreen.height());
-        uint16_t color = random(0x10000);
+        int x = random(TFTscreen.width());
+        int y = random(TFTscreen.height());
+        uint16_t color = YELLOW;
         drawFirework(x, y, color);
         delay(random(500, 3000)); // Delay between fireworks
       }
@@ -196,13 +199,13 @@ void drawFirework(int x, int y, uint16_t color) {
     int x1 = x;
     int y1 = y;
 
-    while (x1 >= 0 && x1 < tft.width() && y1 >= 0 && y1 < tft.height()) {
+    while (x1 >= 0 && x1 < TFTscreen.width() && y1 >= 0 && y1 < TFTscreen.height()) {
       // Calculate the next position
       x1 += velocity * cos(angle * PI / 180);
       y1 += velocity * sin(angle * PI / 180);
 
       // Draw the particle
-      tft.drawPixel(x1, y1, color);
+      TFTscreen.drawPixel(x1, y1, color);
 
       // Fade the particle color
       color -= 0x0101;
