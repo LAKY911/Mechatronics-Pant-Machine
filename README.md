@@ -4,26 +4,26 @@ Project for NTNU course TMM4150 - Machine Design and Mechatronics
 ### Components:
 + Arduino Uno
 + Pushbutton
-+ Hall Effect Sensor
 + TFT 1.8" display
++ Seedstudio IRDistance Interrupter v1.2
 + Seedstudio Grove Speaker
 
 ### To-Do list
 - [x] Create sample codes for each component
-- [ ] Merge sample codes together and create a first working code
-- [ ] Think about what are we going to show on the display
-- [ ] And what sound are we going to play with the speaker
-- [ ] What happens with the inserted can? 
-- [ ] Show our product on Mechatronics EXPO on 22nd of September :tada:
+- [x] Merge sample codes together and create a first working code
+- [ ] Work on graphics shown on the display
+- [ ] Improve speaker sounds
+- [ ] Prepare and print the A3 sheet for EXPO
+- [ ] Show our product on Mechatronics EXPO on Thursday 21nd of September :tada:
 
 ### Wiring:
 |   Component   | Component pin | Arduino pin   |
 | ------------- | ------------- | ------------- |
-| Pushbutton    | 1 |  GND          |
-| Pushbutton    | 2 |  3            |
-| Hall Effect Sensor | GND |  GND |
-| Hall Effect Sensor | VCC |  5V |
-| Hall Effect Sensor |  SIG | A0 |
+| Pushbutton | 1 | GND |
+| Pushbutton | 2 | 7 |
+| IRDistance | GND |  GND |
+| IRDistance | VCC |  5V |
+| IRDistance |  SIG | 6 |
 | Speaker | GND | GND |
 | Speaker | VCC | +5V |
 | Speaker | SIG | 3 |
