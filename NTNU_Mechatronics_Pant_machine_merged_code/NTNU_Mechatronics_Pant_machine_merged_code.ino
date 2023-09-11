@@ -34,6 +34,9 @@ int noteDurations[] = {
   4, 8, 8, 4, 4, 4, 4, 4
 };
 
+int loseMelody[] = {
+    NOTE_A3, NOTE_G3, NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3, NOTE_A2
+}
 
 
 // create an instance of the library
@@ -108,6 +111,10 @@ void loop() {
       Serial.println(randomNumberWin);
       TFTscreen.background(0,0,0); 
       TFTscreen.text("No win today :-(", 6, 57);
+      for (int i = 0; i < 6; i++) {
+        tone(BUZZER_PIN, loseMelody[i], 200);
+        delay(200 + 50);  // Add a short pause between notes
+      }
     }
     else {
       Serial.println(randomNumberWin);
