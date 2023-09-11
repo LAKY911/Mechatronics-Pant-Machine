@@ -23,7 +23,7 @@ int pushbuttonState = 0;    // Pushbutton state
 int BassTab[] = {1911, 1702, 1516, 1431, 1275, 1136, 1012}; //bass 1~7
 
 int arduinoState = 0; // state of arduino - 0 = start; 1 = can inserted; 2 = waiting for pushbutton press; 3 = lottery check
-
+int randomNumberWin = 0;
 
 // create an instance of the library
 TFT TFTscreen = TFT(cs, dc, rst);
@@ -80,12 +80,14 @@ void loop() {
     TFTscreen.background(0,0,0); 
     TFTscreen.text("Checking win!", 6, 57);
     delay(1000);
-    if (random(2) == 0){
-      Serial.println("No win");
+    randomNumberWin = random(2);
+    if (randomNumberWin == 0){
+      Serial.println(randomNumberWin);
       TFTscreen.background(0,0,0); 
       TFTscreen.text("No win today :-(", 6, 57);
     }
     else {
+      Serial.println(randomNumberWin);
       TFTscreen.background(0,0,0);
       TFTscreen.text("You've won! CG!", 6, 57);
     }
