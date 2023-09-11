@@ -7,7 +7,7 @@
                             // outside leads to ground and +5V
 int hallSensorValue = 0;    // variable to store the value read
 
-#define pushbuttonPin 4     // Pushbutton pin
+#define pushbuttonPin 7     // Pushbutton pin
 int pushbuttonState = 0;    // Pushbutton state
 
 void setup() {
