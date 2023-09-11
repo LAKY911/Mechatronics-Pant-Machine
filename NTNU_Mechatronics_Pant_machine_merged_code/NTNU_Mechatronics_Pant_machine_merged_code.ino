@@ -36,7 +36,7 @@ int noteDurations[] = {
 
 int loseMelody[] = {
     NOTE_A3, NOTE_G3, NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3, NOTE_A2
-}
+};
 
 
 // create an instance of the library
@@ -112,7 +112,7 @@ void loop() {
       TFTscreen.background(0,0,0); 
       TFTscreen.text("No win today :-(", 6, 57);
       for (int i = 0; i < 6; i++) {
-        tone(BUZZER_PIN, loseMelody[i], 200);
+        tone(SPEAKER, loseMelody[i], 200);
         delay(200 + 50);  // Add a short pause between notes
       }
     }
@@ -120,6 +120,15 @@ void loop() {
       Serial.println(randomNumberWin);
       TFTscreen.background(0,0,0);
       TFTscreen.text("You've won! CG!", 6, 57);
+      delay(1000);
+      for (int i=0;  i<10; i++){
+        // Draw the firework
+        int x = random(TFTScreen.width());
+        int y = random(TFTScreen.height());
+        uint16_t color = random(0x10000);
+        drawFirework(x, y, color);
+        delay(random(500, 3000)); // Delay between fireworks
+      }
     }
     delay(3000);
     arduinoState = 0; // set arduinoState to start this flow again
@@ -150,5 +159,31 @@ void sound(uint8_t note_index)  // function for speaker
     delayMicroseconds(BassTab[note_index]);
     digitalWrite(SPEAKER, LOW);
     delayMicroseconds(BassTab[note_index]);
+  }
+}
+
+void drawFirework(int x, int y, uint16_t color) {
+  int numParticles = 50; // Number of particles in the firework
+
+  for (int i = 0; i < numParticles; i++) {
+    int angle = random(360);
+    float velocity = random(2, 5);
+    int x1 = x;
+    int y1 = y;
+
+    while (x1 >= 0 && x1 < tft.width() && y1 >= 0 && y1 < tft.height()) {
+      // Calculate the next position
+      x1 += velocity * cos(angle * PI / 180);
+      y1 += velocity * sin(angle * PI / 180);
+
+      // Draw the particle
+      tft.drawPixel(x1, y1, color);
+
+      // Fade the particle color
+      color -= 0x0101;
+
+      // Delay to control the particle speed
+      delay(10);
+    }
   }
 }
