@@ -54,8 +54,6 @@ void setup() {
 void loop() {
   if (arduinoState == 0){         // start, waiting for can to be insterted
     IRDistanceValue = digitalRead(IRdistancePin);  // read the value of Hall Effect sensor
-    TFTscreen.background(0,0,0); 
-    TFTscreen.text("Insert can.", 6, 57);
     if (IRDistanceValue == LOW){  // can insterted?
       arduinoState = 1; // go to next state
       TFTscreen.background(0,0,0); 
@@ -82,7 +80,8 @@ void loop() {
     TFTscreen.background(0,0,0); 
     TFTscreen.text("Checking win!", 6, 57);
     delay(1000);
-    if (random(0,1) == 0){
+    if (random(2) == 0){
+      Serial.println("No win");
       TFTscreen.background(0,0,0); 
       TFTscreen.text("No win today :-(", 6, 57);
     }
@@ -93,6 +92,7 @@ void loop() {
     delay(3000);
     arduinoState = 0; // set arduinoState to start this flow again
     TFTscreen.background(0,0,0); 
+    TFTscreen.text("Insert can.", 6, 57);
   }
   
   /*
