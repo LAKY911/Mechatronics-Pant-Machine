@@ -89,7 +89,7 @@ void loop() {
       arduinoState = 3;
     }
   }
-  else if (arduinoState == 3){
+  /*else if (arduinoState == 3){
     Serial.println("Pushbutton pressed, checking lottery");
     // some lottery function, set something to the display
     delay(500);
@@ -123,7 +123,7 @@ void loop() {
         noTone(SPEAKER);
       }
     }
-  }
+  }*/
   else if (arduinoState == 3){
     Serial.println("Pushbutton pressed, checking lottery");
     // some lottery function, set something to the display
@@ -131,8 +131,8 @@ void loop() {
     TFTscreen.background(0,0,0); 
     TFTscreen.text("Checking win!", 6, 57);
     delay(1000);
-    randomNumberWin = random(100);
-    if (randomNumberWin < 50){
+    randomNumberWin = random(2);
+    if (randomNumberWin == 0){
       Serial.println(randomNumberWin);
       TFTscreen.background(0,0,0); 
       TFTscreen.text("No win today :-(", 6, 57);
@@ -146,10 +146,11 @@ void loop() {
       TFTscreen.background(0,0,0);
       TFTscreen.text("You've won! CG!", 6, 57);
       delay(1000);
+      TFTscreen.background(0,0,0);
       for (int i=0;  i<10; i++){
         // Draw the firework
-        int x = random(TFTScreen.width());
-        int y = random(TFTScreen.height());
+        int x = random(TFTscreen.width());
+        int y = random(TFTscreen.height());
         uint16_t color = random(0x10000);
         drawFirework(x, y, color);
         delay(random(500, 3000)); // Delay between fireworks
@@ -196,13 +197,13 @@ void drawFirework(int x, int y, uint16_t color) {
     int x1 = x;
     int y1 = y;
 
-    while (x1 >= 0 && x1 < tft.width() && y1 >= 0 && y1 < tft.height()) {
+    while (x1 >= 0 && x1 < TFTscreen.width() && y1 >= 0 && y1 < TFTscreen.height()) {
       // Calculate the next position
       x1 += velocity * cos(angle * PI / 180);
       y1 += velocity * sin(angle * PI / 180);
 
       // Draw the particle
-      tft.drawPixel(x1, y1, color);
+      TFTscreen.drawPixel(x1, y1, color);
 
       // Fade the particle color
       color -= 0x0101;
