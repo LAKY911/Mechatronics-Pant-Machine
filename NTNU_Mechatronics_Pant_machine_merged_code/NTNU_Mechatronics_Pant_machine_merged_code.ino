@@ -80,8 +80,8 @@ void loop() {
     TFTscreen.background(0,0,0); 
     TFTscreen.text("Checking win!", 6, 57);
     delay(1000);
-    randomNumberWin = random(2);
-    if (randomNumberWin == 0){
+    randomNumberWin = random(100);
+    if (randomNumberWin < 50){
       Serial.println(randomNumberWin);
       TFTscreen.background(0,0,0); 
       TFTscreen.text("No win today :-(", 6, 57);
