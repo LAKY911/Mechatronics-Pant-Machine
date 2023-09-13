@@ -40,6 +40,8 @@ int loseMelody[] = {
     NOTE_A3, NOTE_G3, NOTE_F3, NOTE_E3, NOTE_D3, NOTE_C3, NOTE_A2
 };
 
+//Global counter for number of cans
+int numCans = 0;
 
 // create an instance of the library
 TFT TFTscreen = TFT(cs, dc, rst);
@@ -76,42 +78,44 @@ void loop() {
       arduinoState = 1; // go to next state
       TFTscreen.background(0,0,0); 
       TFTscreen.text("Can inserted.", 6, 57);
+      delay(500);
+    }
+    else if (digitalRead(pushbuttonPin) == 0){    // sound played, press pushbutton to check lottery win
+    arduinoState = 3;
     }
   }
-  else if (arduinoState == 1){    // can insterted, play speaker sound
+
+  else if (arduinoState == 1){    // can inserted, play speaker sound
     speakerPlay();
-    arduinoState = 2; // go to next state
-    TFTscreen.background(0,0,0);
-    TFTscreen.text("Press button to check win", 6, 57);
-    delay(1000);
+    incrementDisplay();
+    arduinoState = 0;
   }
-  else if (arduinoState == 2){    // sound played, press pushbutton to check lottery win
-    pushbuttonState = digitalRead(pushbuttonPin); // read state of pushbutton
-    if (pushbuttonState == 0){
-      arduinoState = 3;
-    }
-  }
-  /*else if (arduinoState == 3){
+  
+  else if (arduinoState == 3){
     Serial.println("Pushbutton pressed, checking lottery");
+    numCans = 0; //Reset number of cans
+    arduinoState = 0; //Reset state
     // some lottery function, set something to the display
-    delay(500);
+    delay(200);
     TFTscreen.background(0,0,0); 
     TFTscreen.text("Checking win!", 6, 57);
     delay(1000);
-    randomNumberWin = random(2);
-    if (randomNumberWin == 0){
+    randomNumberWin = random(100);
+    if (randomNumberWin < 50){
       Serial.println(randomNumberWin);
       TFTscreen.background(0,0,0); 
       TFTscreen.text("No win today :-(", 6, 57);
       for (int i = 0; i < 6; i++) {
         tone(SPEAKER, loseMelody[i], 200);
-        delay(200 + 50);  // Add a short pause between notes
+        delay(250);  // Add a short pause between notes
       }
     }
     else {
       Serial.println(randomNumberWin);
       TFTscreen.background(0,0,0);
-      TFTscreen.text("You've won! CG!", 6, 57);
+      TFTscreen.text("You've won!", 6, 57);
+      delay(1000);
+      TFTscreen.background(0,0,0);
       for (int thisNote = 0; thisNote < 8; thisNote++) {
         // to calculate the note duration, take one second divided by the note type.
         //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
@@ -124,38 +128,13 @@ void loop() {
         // stop the tone playing:
         noTone(SPEAKER);
       }
-    }
-  }*/
-  else if (arduinoState == 3){
-    Serial.println("Pushbutton pressed, checking lottery");
-    // some lottery function, set something to the display
-    delay(1000);
-    TFTscreen.background(0,0,0); 
-    TFTscreen.text("Checking win!", 6, 57);
-    delay(1000);
-    randomNumberWin = random(100);
-    if (randomNumberWin < 50){
-      Serial.println(randomNumberWin);
-      TFTscreen.background(0,0,0); 
-      TFTscreen.text("No win today :-(", 6, 57);
-      for (int i = 0; i < 6; i++) {
-        tone(SPEAKER, loseMelody[i], 200);
-        delay(200 + 50);  // Add a short pause between notes
-      }
-    }
-    else {
-      Serial.println(randomNumberWin);
-      TFTscreen.background(0,0,0);
-      TFTscreen.text("You've won! CG!", 6, 57);
-      delay(1000);
-      TFTscreen.background(0,0,0);
-      for (int i=0;  i<10; i++){
+      for (int i=0;  i<3; i++){
         // Draw the firework
         int x = random(TFTscreen.width());
         int y = random(TFTscreen.height());
-        uint16_t color = YELLOW;
+        uint16_t color = 0xFFFF00;
         drawFirework(x, y, color);
-        delay(random(500, 3000)); // Delay between fireworks
+        delay(random(200, 1000)); // Delay between fireworks
       }
     }
     delay(3000);
@@ -170,14 +149,24 @@ void loop() {
    */
 }
 
+void incrementDisplay(){
+  numCans++;
+  TFTscreen.background(0,0,0);
+  char str[12];
+  sprintf(str, "%d", numCans);
+  TFTscreen.text(str, 6, 57);
+}
+
+
 void speakerPlay(){
     /*sound bass 1~7*/
-  for (int note_index = 0; note_index < 2; note_index++)
+    for (int note_index = 0; note_index < 2; note_index++)
   {
     sound(note_index);
     delay(200);
   }
 }
+
 
 void sound(uint8_t note_index)  // function for speaker
 {
@@ -195,7 +184,7 @@ void drawFirework(int x, int y, uint16_t color) {
 
   for (int i = 0; i < numParticles; i++) {
     int angle = random(360);
-    float velocity = random(2, 5);
+    float velocity = random(30,40);
     int x1 = x;
     int y1 = y;
 
@@ -206,12 +195,12 @@ void drawFirework(int x, int y, uint16_t color) {
 
       // Draw the particle
       TFTscreen.drawPixel(x1, y1, color);
-
+      TFTscreen.drawPixel(-x1, -y1, color);
       // Fade the particle color
-      color -= 0x0101;
+      color -= 0x0001;
 
       // Delay to control the particle speed
-      delay(10);
+      delay(5);
     }
   }
 }
